@@ -1,6 +1,6 @@
-#include "compiler/scanner.h"
+#include "compiler/runner.h"
 
 int main() {
-  cgo::Scan();
+  cgo::RunProgram("testing/main.go");
   return 0;
 }

@@ -1,14 +1,11 @@
 set(SOURCES
-    runner.cc
-    scanner.cc
+    file.cc
 )
 
-set(TEST_SOURCES
-    scanner_test.cc
-)
+set(TEST_SOURCES)
 
-add_library(compiler ${SOURCES})
-target_link_libraries(compiler fmt::fmt)
+add_library(ms ${SOURCES})
+target_link_libraries(ms)
 
 list(TRANSFORM TEST_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 set(GLOBAL_TEST_SOURCES ${GLOBAL_TEST_SOURCES} ${TEST_SOURCES} PARENT_SCOPE)

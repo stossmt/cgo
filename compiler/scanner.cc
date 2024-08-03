@@ -4,6 +4,6 @@
 
 namespace cgo {
 
-void Scan() { fmt::print("Hello, {}!\n", "other"); }
+void Scan() { fmt::println("FIXME: implement scanner"); }
 
 } // namespace cgo

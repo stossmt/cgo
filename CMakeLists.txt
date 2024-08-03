@@ -18,13 +18,13 @@ find_package(GTest CONFIG REQUIRED)
 
 # Add subdirectories
 add_subdirectory(compiler)
-add_subdirectory(tool)
+add_subdirectory(ms)
 
 # Build main executable
 add_executable(cgo cmd/cgo.cc)
 target_link_libraries(cgo 
     compiler 
-    tool
+    ms
     fmt::fmt
 )
 
