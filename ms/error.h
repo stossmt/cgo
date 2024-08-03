@@ -5,6 +5,7 @@
 #include <string>
 
 #include "fmt/core.h"
+#include <fmt/format.h>
 
 // Macro to unwrap an ErrorOr and return the error if it's not OK.
 #define TRY(error_or)                                                          \
@@ -39,10 +40,90 @@ enum class ErrorCode {
   DO_NOT_USE = 999,
 };
 
+} // namespace ms
+
+namespace fmt {
+
+template <> struct formatter<ms::ErrorCode> {
+  constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) {
+    return ctx.end();
+  }
+
+  template <typename FormatContext>
+  auto format(const ms::ErrorCode &code, FormatContext &ctx)
+      -> decltype(ctx.out()) {
+    std::string name;
+    switch (code) {
+    case ms::ErrorCode::OK:
+      name = "OK";
+      break;
+    case ms::ErrorCode::CANCELLED:
+      name = "Cancelled";
+      break;
+    case ms::ErrorCode::UNKNOWN:
+      name = "Unknown";
+      break;
+    case ms::ErrorCode::INVALID_ARGUMENT:
+      name = "InvalidArgument";
+      break;
+    case ms::ErrorCode::DEADLINE_EXCEEDED:
+      name = "DeadlineExceeded";
+      break;
+    case ms::ErrorCode::NOT_FOUND:
+      name = "NotFound";
+      break;
+    case ms::ErrorCode::ALREADY_EXISTS:
+      name = "AlreadyExists";
+      break;
+    case ms::ErrorCode::PERMISSION_DENIED:
+      name = "PermissionDenied";
+      break;
+    case ms::ErrorCode::UNAUTHENTICATED:
+      name = "Unauthenticated";
+      break;
+    case ms::ErrorCode::RESOURCE_EXHAUSTED:
+      name = "ResourceExhausted";
+      break;
+    case ms::ErrorCode::FAILED_PRECONDITION:
+      name = "FailedPrecondition";
+      break;
+    case ms::ErrorCode::ABORTED:
+      name = "Aborted";
+      break;
+    case ms::ErrorCode::OUT_OF_RANGE:
+      name = "OutOfRange";
+      break;
+    case ms::ErrorCode::UNIMPLEMENTED:
+      name = "Unimplemented";
+      break;
+    case ms::ErrorCode::INTERNAL:
+      name = "Internal";
+      break;
+    case ms::ErrorCode::UNAVAILABLE:
+      name = "Unavailable";
+      break;
+    case ms::ErrorCode::DATA_LOSS:
+      name = "DataLoss";
+      break;
+    case ms::ErrorCode::DO_NOT_USE:
+      name = "DoNotUse";
+      break;
+    default:
+      name = "Unknown";
+      break;
+    }
+    return fmt::format_to(ctx.out(), "{}", name);
+  }
+};
+
+} // namespace fmt
+
+namespace ms {
+
 class [[nodiscard]] Error {
 public:
   Error(const std::string &message, ErrorCode code)
-      : message_(message), code_(code) {}
+      : message_(fmt::format("[{}] {}", code, message)), code_(code) {}
 
   static Error Ok() { return Error("", ErrorCode::OK); }
 
