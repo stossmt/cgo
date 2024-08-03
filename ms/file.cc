@@ -14,7 +14,7 @@ ErrorOr<std::string> ReadFile(const std::string &path) {
     fclose(file);
     return contents;
   }
-  return Error("Failed to read file: " + path, ErrorCode::NOT_FOUND);
+  return Error::NotFound("File not found: {}", path);
 }
 
 } // namespace ms

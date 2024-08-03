@@ -46,6 +46,28 @@ public:
 
   static Error Ok() { return Error("", ErrorCode::OK); }
 
+#define DEFINE_ERROR_FUNCTION(name, code)                                      \
+  template <typename... Args>                                                  \
+  static Error name(fmt::format_string<Args...> format_str, Args &&...args) {  \
+    return Error(fmt::format(format_str, std::forward<Args>(args)...), code);  \
+  }
+
+  DEFINE_ERROR_FUNCTION(Cancelled, ErrorCode::CANCELLED)
+  DEFINE_ERROR_FUNCTION(Unknown, ErrorCode::UNKNOWN)
+  DEFINE_ERROR_FUNCTION(InvalidArgument, ErrorCode::INVALID_ARGUMENT)
+  DEFINE_ERROR_FUNCTION(DeadlineExceeded, ErrorCode::DEADLINE_EXCEEDED)
+  DEFINE_ERROR_FUNCTION(NotFound, ErrorCode::NOT_FOUND)
+  DEFINE_ERROR_FUNCTION(AlreadyExists, ErrorCode::ALREADY_EXISTS)
+  DEFINE_ERROR_FUNCTION(PermissionDenied, ErrorCode::PERMISSION_DENIED)
+  DEFINE_ERROR_FUNCTION(ResourceExhausted, ErrorCode::RESOURCE_EXHAUSTED)
+  DEFINE_ERROR_FUNCTION(FailedPrecondition, ErrorCode::FAILED_PRECONDITION)
+  DEFINE_ERROR_FUNCTION(Aborted, ErrorCode::ABORTED)
+  DEFINE_ERROR_FUNCTION(OutOfRange, ErrorCode::OUT_OF_RANGE)
+  DEFINE_ERROR_FUNCTION(Unimplemented, ErrorCode::UNIMPLEMENTED)
+  DEFINE_ERROR_FUNCTION(Internal, ErrorCode::INTERNAL)
+  DEFINE_ERROR_FUNCTION(Unavailable, ErrorCode::UNAVAILABLE)
+  DEFINE_ERROR_FUNCTION(DataLoss, ErrorCode::DATA_LOSS)
+
   bool ok() const { return code_ == ErrorCode::OK; }
   const std::string &message() const { return message_; }
   ErrorCode code() const { return code_; }
