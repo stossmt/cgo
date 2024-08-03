@@ -3,9 +3,11 @@
 
 #include <string>
 
+#include "ms/error.h"
+
 namespace ms {
 
 // @return The contents of the file.
-std::string ReadFile(const std::string &path);
+ErrorOr<std::string> ReadFile(const std::string &path);
 
 } // namespace ms

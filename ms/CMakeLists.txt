@@ -5,7 +5,7 @@ set(SOURCES
 set(TEST_SOURCES)
 
 add_library(ms ${SOURCES})
-target_link_libraries(ms)
+target_link_libraries(ms fmt::fmt)
 
 list(TRANSFORM TEST_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 set(GLOBAL_TEST_SOURCES ${GLOBAL_TEST_SOURCES} ${TEST_SOURCES} PARENT_SCOPE)

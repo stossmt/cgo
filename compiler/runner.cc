@@ -7,9 +7,17 @@
 
 namespace cgo {
 
+using ::ms::ErrorOr;
+using ::ms::ReadFile;
+
 void RunProgram(const std::string &path) {
-  std::string contents = ms::ReadFile(path);
-  fmt::print("Running program: {}\n", contents);
+  ErrorOr<std::string> contents = ReadFile(path);
+  if (contents.ok()) {
+    fmt::println("Successfully read file: {}", contents.value());
+  } else {
+    fmt::println("{}", contents.error().message());
+  }
+
   Scan();
 }
 
