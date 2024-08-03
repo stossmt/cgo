@@ -6,6 +6,16 @@
 
 #include "fmt/core.h"
 
+// Macro to unwrap an ErrorOr and return the error if it's not OK.
+#define TRY(error_or)                                                          \
+  ({                                                                           \
+    auto _error_or = (error_or);                                               \
+    if (!_error_or.ok()) {                                                     \
+      return _error_or.error();                                                \
+    }                                                                          \
+    _error_or.value();                                                         \
+  })
+
 namespace ms {
 
 enum class ErrorCode {
@@ -29,11 +39,14 @@ enum class ErrorCode {
   DO_NOT_USE = 999,
 };
 
-class Error {
+class [[nodiscard]] Error {
 public:
   Error(const std::string &message, ErrorCode code)
       : message_(message), code_(code) {}
 
+  static Error Ok() { return Error("", ErrorCode::OK); }
+
+  bool ok() const { return code_ == ErrorCode::OK; }
   const std::string &message() const { return message_; }
   ErrorCode code() const { return code_; }
 
@@ -49,7 +62,7 @@ public:
 
   const Error &error() const { return error_; }
 
-  bool ok() const { return error_.code() == ErrorCode::OK; }
+  bool ok() const { return error_.ok(); }
   const T &value() const { return value_; }
 
 private:

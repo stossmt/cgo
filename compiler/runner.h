@@ -1,9 +1,10 @@
 #pragma once
 
+#include "ms/error.h"
 #include <string>
 
 namespace cgo {
 
-void RunProgram(const std::string &path);
+ms::Error RunProgram(const std::string &path);
 
 }
